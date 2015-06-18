@@ -1260,6 +1260,7 @@ const char *avformat_license(void);
  * @see av_register_output_format()
  * @see av_register_protocol()
  */
+CHERI_CALL
 void av_register_all(void);
 
 void av_register_input_format(AVInputFormat *format);
@@ -1422,6 +1423,7 @@ int av_probe_input_buffer(AVIOContext *pb, AVInputFormat **fmt,
  *
  * @note If you want to use custom IO, preallocate the format context and set its pb field.
  */
+CHERI_CALL
 int avformat_open_input(AVFormatContext **ps, const char *filename, AVInputFormat *fmt, AVDictionary **options);
 
 /**
@@ -1445,6 +1447,7 @@ int avformat_open_input(AVFormatContext **ps, const char *filename, AVInputForma
  * @todo Let the user decide somehow what information is needed so that
  *       we do not waste time getting stuff the user does not need.
  */
+CHERI_CALL
 int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options);
 
 /**
@@ -1502,6 +1505,7 @@ int av_find_best_stream(AVFormatContext *ic,
  *
  * @return 0 if OK, < 0 on error or end of file
  */
+CHERI_CALL
 int av_read_frame(AVFormatContext *s, AVPacket *pkt);
 
 /**

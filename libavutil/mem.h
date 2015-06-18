@@ -79,6 +79,7 @@
  * be allocated.
  * @see av_mallocz()
  */
+CHERI_CALL
 void *av_malloc(size_t size) av_malloc_attrib av_alloc_size(1);
 
 /**

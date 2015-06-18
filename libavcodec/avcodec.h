@@ -3212,6 +3212,7 @@ void avcodec_register_all(void);
  * @return An AVCodecContext filled with default values or NULL on failure.
  * @see avcodec_get_context_defaults
  */
+CHERI_CALL
 AVCodecContext *avcodec_alloc_context3(const AVCodec *codec);
 
 /**
@@ -3250,6 +3251,7 @@ const AVClass *avcodec_get_class(void);
  * @param src source codec context
  * @return AVERROR() on error (e.g. memory allocation error), 0 on success
  */
+CHERI_CALL
 int avcodec_copy_context(AVCodecContext *dest, const AVCodecContext *src);
 
 #if FF_API_AVFRAME_LAVC
@@ -3324,6 +3326,7 @@ void avcodec_free_frame(AVFrame **frame);
  * @see avcodec_alloc_context3(), avcodec_find_decoder(), avcodec_find_encoder(),
  *      av_dict_set(), av_opt_find().
  */
+CHERI_CALL
 int avcodec_open2(AVCodecContext *avctx, const AVCodec *codec, AVDictionary **options);
 
 /**
@@ -3424,6 +3427,7 @@ int av_dup_packet(AVPacket *pkt);
  *
  * @param pkt packet to free
  */
+CHERI_CALL
 void av_free_packet(AVPacket *pkt);
 
 /**
@@ -3547,6 +3551,7 @@ void av_packet_rescale_ts(AVPacket *pkt, AVRational tb_src, AVRational tb_dst);
  * @param id AVCodecID of the requested decoder
  * @return A decoder if one was found, NULL otherwise.
  */
+CHERI_CALL
 AVCodec *avcodec_find_decoder(enum AVCodecID id);
 
 /**
@@ -3701,6 +3706,7 @@ int avcodec_decode_audio4(AVCodecContext *avctx, AVFrame *frame,
  * @return On error a negative value is returned, otherwise the number of bytes
  * used or zero if no frame could be decompressed.
  */
+CHERI_CALL
 int avcodec_decode_video2(AVCodecContext *avctx, AVFrame *picture,
                          int *got_picture_ptr,
                          AVPacket *avpkt);
@@ -4126,6 +4132,7 @@ void avpicture_free(AVPicture *picture);
  *
  * @see av_image_fill_arrays().
  */
+CHERI_CALL
 int avpicture_fill(AVPicture *picture, uint8_t *ptr,
                    enum AVPixelFormat pix_fmt, int width, int height);
 
@@ -4146,6 +4153,7 @@ int avpicture_layout(const AVPicture* src, enum AVPixelFormat pix_fmt,
  *
  * @see av_image_get_buffer_size().
  */
+CHERI_CALL
 int avpicture_get_size(enum AVPixelFormat pix_fmt, int width, int height);
 
 #if FF_API_DEINTERLACE

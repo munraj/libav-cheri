@@ -189,6 +189,7 @@ void sws_freeContext(struct SwsContext *swsContext);
  * @note this function is to be removed after a saner alternative is
  *       written
  */
+CHERI_CALL
 struct SwsContext *sws_getContext(int srcW, int srcH, enum AVPixelFormat srcFormat,
                                   int dstW, int dstH, enum AVPixelFormat dstFormat,
                                   int flags, SwsFilter *srcFilter,
@@ -220,6 +221,7 @@ struct SwsContext *sws_getContext(int srcW, int srcH, enum AVPixelFormat srcForm
  *                  the destination image
  * @return          the height of the output slice
  */
+CHERI_CALL
 int sws_scale(struct SwsContext *c, const uint8_t *const srcSlice[],
               const int srcStride[], int srcSliceY, int srcSliceH,
               uint8_t *const dst[], const int dstStride[]);

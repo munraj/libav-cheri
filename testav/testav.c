@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <machine/cheri.h>
+#include <cheri/sandbox.h>
+
+struct cheri_object cheri_libav;
+
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
@@ -8,18 +13,22 @@
 #define	TRY(x) do {							\
 	int rc;								\
 									\
+	printf("Trying " #x "\n");					\
 	rc = (x);							\
 	if (rc != 0) {							\
 		fprintf(stderr, "FAILED: " #x " (rc=%d)\n", rc);	\
 		return (1);						\
 	}								\
+	printf("Done " #x "\n");					\
 } while (0)
 
 #define	TRYP(x) do {							\
+	printf("Trying " #x "\n");					\
 	if ((x) == NULL) {						\
 		fprintf(stderr, "FAILED: " #x "\n");			\
 		return (1);						\
 	}								\
+	printf("Done " #x "\n");					\
 } while (0)
 
 int	fwritebmp(const uint8_t *buf, size_t w, size_t h, size_t l,

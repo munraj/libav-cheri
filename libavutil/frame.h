@@ -462,6 +462,7 @@ typedef struct AVFrame {
  * must be allocated through other means, e.g. with av_frame_get_buffer() or
  * manually.
  */
+CHERI_CALL
 AVFrame *av_frame_alloc(void);
 
 /**

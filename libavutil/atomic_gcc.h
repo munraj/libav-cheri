@@ -49,7 +49,7 @@ static inline int atomic_int_add_and_fetch_gcc(volatile int *ptr, int inc)
 static inline void *atomic_ptr_cas_gcc(void * volatile *ptr,
                                        void *oldval, void *newval)
 {
-#ifdef __ARMCC_VERSION
+#if defined(__ARMCC_VERSION) || defined(__clang__)
     // armcc will throw an error if ptr is not an integer type
     volatile uintptr_t *tmp = (volatile uintptr_t*)ptr;
     return (void*)__sync_val_compare_and_swap(tmp, oldval, newval);

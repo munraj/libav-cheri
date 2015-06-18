@@ -279,6 +279,7 @@ int avformat_open_input(AVFormatContext **ps, const char *filename,
 
     /* Allocate private data. */
     if (s->iformat->priv_data_size > 0) {
+	printf("allocating s->iformat->priv_data_size == %zu bytes internally\n", (size_t)s->iformat->priv_data_size);
         if (!(s->priv_data = av_mallocz(s->iformat->priv_data_size))) {
             ret = AVERROR(ENOMEM);
             goto fail;
@@ -401,6 +402,8 @@ int ff_read_packet(AVFormatContext *s, AVPacket *pkt)
         pkt->size = 0;
         av_init_packet(pkt);
         ret = s->iformat->read_packet(s, pkt);
+	printf("pkt size from s->iformat->read_packet is %zu\n",
+	    (size_t)pkt->size);
         if (ret < 0) {
             if (!pktl || ret == AVERROR(EAGAIN))
                 return ret;
