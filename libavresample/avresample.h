@@ -21,6 +21,8 @@
 #ifndef AVRESAMPLE_AVRESAMPLE_H
 #define AVRESAMPLE_AVRESAMPLE_H
 
+#include "cheri_libav.h"
+
 /**
  * @file
  * @ingroup lavr

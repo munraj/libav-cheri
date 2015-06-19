@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef SANDBOX_ABI
 #include <machine/cheri.h>
 #include <cheri/sandbox.h>
 
 struct cheri_object cheri_libav;
+struct sandbox_class *sb_cp;
+struct sandbox_object *sb_op;
+#endif
 
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
@@ -33,6 +37,7 @@ struct cheri_object cheri_libav;
 
 int	fwritebmp(const uint8_t *buf, size_t w, size_t h, size_t l,
 	    FILE *fp);
+void	sb_init(void);
 
 int
 main(void)
@@ -48,6 +53,8 @@ main(void)
 	uint8_t *buf;
 	size_t i, v, sz;
 	int fdone, rc;
+
+	sb_init();
 
 	av_register_all();
 
@@ -185,4 +192,27 @@ fwritebmp(const uint8_t *buf, size_t w, size_t h, size_t l, FILE *fp)
 	}
 
 	return (0);
+}
+
+void
+sb_init(void)
+{
+#ifdef SANDBOX_ABI
+	int rc;
+
+	rc = sandbox_class_new("/tmp2/testav_helper", 8 * 1024 * 1024,
+	    &sb_cp);
+	if (rc != 0) {
+		fprintf(stderr, "sandbox_class_new failed\n");
+		exit(1);
+	}
+
+	rc = sandbox_object_new(sb_cp, 1 * 1024 * 1024, &sb_op);
+	if (rc != 0) {
+		fprintf(stderr, "sandbox_object_new failed\n");
+		exit(1);
+	}
+
+	cheri_libav = sandbox_object_getobject(sb_op);
+#endif
 }

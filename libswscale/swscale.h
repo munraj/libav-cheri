@@ -21,6 +21,8 @@
 #ifndef SWSCALE_SWSCALE_H
 #define SWSCALE_SWSCALE_H
 
+#include "cheri_libav.h"
+
 /**
  * @file
  * @ingroup libsws

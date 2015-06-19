@@ -21,6 +21,8 @@
 #ifndef AVFORMAT_AVFORMAT_H
 #define AVFORMAT_AVFORMAT_H
 
+#include "cheri_libav.h"
+
 /**
  * @file
  * @ingroup libavf

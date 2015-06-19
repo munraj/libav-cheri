@@ -22,6 +22,8 @@
 #ifndef AVFILTER_AVFILTER_H
 #define AVFILTER_AVFILTER_H
 
+#include "cheri_libav.h"
+
 /**
  * @file
  * @ingroup lavfi

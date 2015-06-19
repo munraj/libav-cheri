@@ -21,6 +21,8 @@
 #ifndef AVCODEC_AVCODEC_H
 #define AVCODEC_AVCODEC_H
 
+#include "cheri_libav.h"
+
 /**
  * @file
  * @ingroup libavc

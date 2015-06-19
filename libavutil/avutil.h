@@ -21,6 +21,8 @@
 #ifndef AVUTIL_AVUTIL_H
 #define AVUTIL_AVUTIL_H
 
+#include "cheri_libav.h"
+
 /**
  * @file
  * external API header

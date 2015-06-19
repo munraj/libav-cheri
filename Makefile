@@ -1,4 +1,9 @@
 include config.mak
+#CC+=		-DCHERI_CALL=""
+HOSTCC+=	-DCHERI_CALL=""
+CC+=		-DSANDBOX_ABI -DCHERI_CALL="__attribute__((cheri_ccallee))	\
+		    __attribute__((cheri_method_suffix(\"_cap\")))	\
+		    __attribute__((cheri_method_class(cheri_libav)))"
 
 vpath %.c    $(SRC_PATH)
 vpath %.h    $(SRC_PATH)
