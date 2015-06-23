@@ -201,7 +201,7 @@ sb_init(void)
 	int rc;
 
 	rc = sandbox_class_new("/tmp2/testav_helper", 8 * 1024 * 1024,
-	    &sb_cp);
+	    &sb_cp, 1);
 	if (rc != 0) {
 		fprintf(stderr, "sandbox_class_new failed\n");
 		exit(1);

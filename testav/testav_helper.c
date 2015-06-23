@@ -1,3 +1,4 @@
+#include <machine/cheri.h>
 
 int
 invoke(void)

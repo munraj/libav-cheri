@@ -9,7 +9,6 @@ SANDBOX_ABI=	yes
 .endif
 
 PROG=		testav
-OBJS=		testav.o
 
 AVLIBS=		../libavformat/libavformat.a				\
 		../libavcodec/libavcodec.a				\
@@ -26,9 +25,11 @@ CFLAGS=		-I.. -DSANDBOX_ABI					\
 		    __attribute__((cheri_method_suffix(\"_cap\")))	\
 		    __attribute__((cheri_method_class(cheri_libav)))"
 LDADD=		-static -lcheri
+LDADD=		-static -lcheri
 
 HELPER=		testav_helper
-HELPER_OBJS=	testav_helper.help.o
+HELPER_OBJS=	testav_helper.help.o					\
+		syscalls.o
 HELPER_LDFLAGS=	-Wl,--script=$(CHERIBSD)/lib/libc_cheri/sandbox.ld	\
 		-nostdlib -Wl,--whole-archive
 HELPER_CFLAGS=	-I.. -mabi=sandbox					\
@@ -41,7 +42,7 @@ LDADD=		$(AVLIBS) $(AVDEPS)
 .endif # SANDBOX_ABI
 
 .PHONY: all clean
-.SUFFIXES: .c .o .help.o
+.SUFFIXES: .S .c .o .help.o
 
 all: $(PROG)
 
@@ -49,6 +50,9 @@ clean:
 	$(RM) -f $(OBJS) $(HELPER_OBJS) $(HELPER) $(PROG)
 
 .c.help.o:
+	$(CC) $(HELPER_CFLAGS) -o $@ -c $<
+
+.S.help.o:
 	$(CC) $(HELPER_CFLAGS) -o $@ -c $<
 
 .c.o:
