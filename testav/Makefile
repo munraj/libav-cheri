@@ -28,14 +28,18 @@ LDADD=		-static -lcheri
 LDADD=		-static -lcheri
 
 HELPER=		testav_helper
-HELPER_OBJS=	testav_helper.help.o					\
+HELPER_OBJS=	fixunsdfdi.help.o					\
+		fixunssfdi.help.o					\
+		isinf.help.o						\
+		testav_helper.help.o					\
 		syscalls.o
 HELPER_LDFLAGS=	-Wl,--script=$(CHERIBSD)/lib/libc_cheri/sandbox.ld	\
 		-nostdlib -Wl,--whole-archive
 HELPER_CFLAGS=	-I.. -mabi=sandbox					\
 		-DCHERI_CALL="__attribute__((cheri_ccallee))	\
 		    __attribute__((cheri_method_suffix(\"_cap\")))	\
-		    __attribute__((cheri_method_class(cheri_libav)))"
+		    __attribute__((cheri_method_class(cheri_libav)))"	\
+		-Wno-shift-count-overflow
 HELPER_LDADD=	$(AVLIBS) -Wl,--no-whole-archive $(AVDEPS) -lc_cheri
 .else # !SANDBOX_ABI
 LDADD=		$(AVLIBS) $(AVDEPS)

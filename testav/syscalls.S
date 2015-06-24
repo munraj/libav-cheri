@@ -9,6 +9,7 @@
 #define	LI		li
 #define	SYSCALL		syscall
 #define	CGETBASE	cgetbase
+#define	CTOPTR		ctoptr $v0, $c3, $c0
 #define	CA0		$c3
 #define	CA1		$c4
 #define	CA2		$c5
@@ -34,6 +35,14 @@ read:
 close:
 	MOVE $a1, $a0		/* int fd */
 	LI $a0, SYS_close
+	SYSCALL
+
+.global open
+open:
+	MOVE $a3, $a1		/* mode_t mode */
+	MOVE $a2, $a0		/* int flags */
+	CGETBASE $a1, CA0	/* const char *path */
+	LI $a0, SYS_open
 	SYSCALL
 
 .global rename
@@ -174,6 +183,14 @@ recvfrom:
 	LI $a0, SYS_recvfrom
 	SYSCALL
 
+.global recvmsg
+recvmsg:
+	MOVE $a3, $a1		/* int flags */
+	CGETBASE $a2, CA0	/* struct msghdr *msg */
+	MOVE $a1, $a0		/* int s */
+	LI $a0, SYS_recvmsg
+	SYSCALL
+
 .global send
 send:
 	LI $a6, 0		/* (socklen_t tolen) */
@@ -196,12 +213,91 @@ sendto:
 	LI $a0, SYS_sendto
 	SYSCALL
 
-/* XXX: the double capability won't necessarily work! */ 
-.global getaddrinfo
-getaddrinfo:
-	CGETBASE $a4, CA3	/* struct addrinfo **res */
-	CGETBASE $a3, CA2	/* const struct addrinfo *hints */
-	CGETBASE $a2, CA1	/* const char *servname */
-	CGETBASE $a1, CA0	/* const char *hostname */
-	LI $a0, SYS_getaddrinfo
+.global getsockname
+getsockname:
+	CGETBASE $a3, CA1	/* socklen_t *namelen */
+	CGETBASE $a2, CA0	/* struct sockaddr *name */
+	MOVE $a1, $a0		/* int s */
+	LI $a0, SYS_getsockname
+	SYSCALL
+
+.global sendmsg
+sendmsg:
+	MOVE $a3, $a1		/* int flags */
+	CGETBASE $a2, CA0	/* const struct msghdr *msg */
+	MOVE $a1, $a0		/* int s */
+	LI $a0, SYS_sendmsg
+	SYSCALL
+
+.global getpeername
+getpeername:
+	CGETBASE $a3, CA1	/* socklen_t *namelen */
+	CGETBASE $a2, CA0	/* struct sockaddr *name */
+	MOVE $a1, $a0		/* int s */
+	LI $a0, SYS_getpeername
+	SYSCALL
+
+.global shutdown
+shutdown:
+	MOVE $a2, $a1		/* int how */
+	MOVE $a1, $a0		/* int s */
+	LI $a0, SYS_shutdown
+	SYSCALL
+
+/* XXX: Doubly-indirect capability. */
+.global sigaction
+sigaction:
+	CGETBASE $a3, CA1	/* struct sigaction *oact */
+	CGETBASE $a2, CA0	/* const struct sigaction *act */
+	MOVE $a1, $a0		/* int sig */
+	LI $a0, SYS_sigaction
+	SYSCALL
+
+.global mmap
+mmap:
+	MOVE $a6, $a4		/* off_t offset */
+	MOVE $a5, $a3		/* int fd */
+	MOVE $a4, $a2		/* int flags */
+	MOVE $a3, $a1		/* int prot */
+	MOVE $a2, $a0		/* size_t len */
+	CGETBASE $a1, CA0	/* void *addr */
+	LI $a0, SYS_mmap
+	SYSCALL
+	CTOPTR
+
+.global munmap
+munmap:
+	MOVE $a2, $a0		/* size_t len */
+	CGETBASE $a1, CA0	/* void *addr */
+	LI $a0, SYS_munmap
+	SYSCALL
+
+.global nanosleep
+nanosleep:
+	CGETBASE $a2, CA1	/* struct timespec *rmtp */
+	CGETBASE $a1, CA0	/* const struct timespec *rqtp */
+	LI $a0, SYS_nanosleep
+	SYSCALL
+
+.global getrusage
+getrusage:
+	CGETBASE $a2, CA0	/* struct rusage *rusage */
+	MOVE $a1, $a0		/* int who */
+	LI $a0, SYS_getrusage
+	SYSCALL
+
+.global __fcntl_int
+__fcntl_int:
+	MOVE $a3, $a1
+	CGETBASE $a2, CA0	/* int cmd */
+	MOVE $a1, $a0		/* int fd */
+	LI $a0, SYS_fcntl
+	SYSCALL
+
+.global __fcntl_ptr
+__fcntl_ptr:
+	CGETBASE $a3, CA1
+	CGETBASE $a2, CA0	/* int cmd */
+	MOVE $a1, $a0		/* int fd */
+	LI $a0, SYS_fcntl
 	SYSCALL
